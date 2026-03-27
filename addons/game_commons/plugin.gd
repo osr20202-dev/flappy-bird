@@ -8,6 +8,7 @@ func _enter_tree() -> void:
 	add_autoload_singleton("SceneManager", "res://addons/game_commons/autoload/scene_manager.gd")
 	add_autoload_singleton("AudioManager", "res://addons/game_commons/autoload/audio_manager.gd")
 	add_autoload_singleton("SaveManager", "res://addons/game_commons/autoload/save_manager.gd")
+	add_autoload_singleton("SettingsManager", "res://addons/game_commons/autoload/settings_manager.gd")
 
 func _exit_tree() -> void:
 	print("Game Commons addon disabled")
@@ -16,3 +17,4 @@ func _exit_tree() -> void:
 	remove_autoload_singleton("SceneManager")
 	remove_autoload_singleton("AudioManager")
 	remove_autoload_singleton("SaveManager")
+	remove_autoload_singleton("SettingsManager")

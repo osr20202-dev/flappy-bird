@@ -14,6 +14,7 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 - **SceneManager** — Scene transitions, reload
 - **AudioManager** — Music/SFX playback with volume control
 - **SaveManager** — Save/load using ConfigFile
+- **SettingsManager** — Game settings (audio, display, input) with persistence
 
 ### UI Base Classes
 
@@ -22,6 +23,7 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 ### Examples
 
 - `examples/main_menu_example.gd` — How to use BaseMenu
+- `examples/options_menu_example.gd` — Settings/options menu with SettingsManager
 
 ## 🚀 Installation
 
@@ -51,6 +53,29 @@ AudioManager.set_music_volume(0.7)
 ```gdscript
 SaveManager.save_value("game", "high_score", 100)
 var score = SaveManager.load_value("game", "high_score", 0)
+```
+
+### SettingsManager
+
+```gdscript
+# Audio
+SettingsManager.set_music_volume(0.7)
+SettingsManager.set_sfx_volume(0.9)
+var volume = SettingsManager.get_music_volume()
+
+# Display
+SettingsManager.set_fullscreen(true)
+SettingsManager.set_vsync(false)
+SettingsManager.set_window_size(Vector2i(1280, 720))
+
+# Input rebinding
+SettingsManager.rebind_action("jump", event)
+
+# Reset
+SettingsManager.reset_to_defaults()
+
+# Listen for changes
+SettingsManager.settings_changed.connect(_on_settings_changed)
 ```
 
 ### BaseMenu (UI)
