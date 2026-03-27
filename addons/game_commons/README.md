@@ -20,6 +20,12 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 
 - **BaseMenu** — Common menu logic (show/hide, fade)
 
+### Templates
+
+- **constants_template.gd** — Game constants (speeds, layers, paths)
+- **enums_template.gd** — Common enums (states, directions)
+- **game_manager_template.gd** — Core game manager (score, state)
+
 ### Examples
 
 - `examples/main_menu_example.gd` — How to use BaseMenu
