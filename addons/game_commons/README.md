@@ -13,7 +13,7 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 
 - **SceneManager** — Scene transitions, reload
 - **AudioManager** — Music/SFX playback with volume control
-- **SaveManager** — Save/load using ConfigFile
+- **SaveManager** — Advanced save system (slots, encryption, backup, versioning)
 - **SettingsManager** — Game settings (audio, display, input) with persistence
 
 ### UI Base Classes
@@ -24,6 +24,7 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 
 - `examples/main_menu_example.gd` — How to use BaseMenu
 - `examples/options_menu_example.gd` — Settings/options menu with SettingsManager
+- `examples/save_load_example.gd` — Complete save/load workflow with slots
 
 ## 🚀 Installation
 
@@ -50,10 +51,57 @@ AudioManager.set_music_volume(0.7)
 
 ### SaveManager
 
+**Basic usage:**
 ```gdscript
-SaveManager.save_value("game", "high_score", 100)
-var score = SaveManager.load_value("game", "high_score", 0)
+# Hierarchical game data
+var game_data := {
+    "player": { "hp": 100, "level": 5 },
+    "world": { "day": 10, "flags": { "boss_defeated": true } }
+}
+
+# Save to slot 1 with metadata
+var metadata := {
+    "playtime_seconds": 3600,
+    "player_name": "Hero",
+    "location": "Town"
+}
+SaveManager.save_game(1, game_data, metadata)
+
+# Load from slot 1
+var loaded_data = SaveManager.load_game(1)
+print(loaded_data["player"]["hp"])  # 100
+
+# List all slots
+var slots = SaveManager.list_slots()
+for slot_meta in slots:
+    print("Slot %d: %s" % [slot_meta.slot_index, slot_meta.save_time])
+
+# Delete slot
+SaveManager.delete_slot(1)
+
+# Check if slot exists
+if SaveManager.slot_exists(1):
+    print("Save found!")
 ```
+
+**Advanced features:**
+```gdscript
+# Enable encryption (anti-cheat)
+SaveManager.set_encryption_enabled(true)
+
+# Enable/disable auto-backup
+SaveManager.set_auto_backup(true)
+
+# Get metadata without loading full save
+var meta = SaveManager.get_slot_metadata(1)
+print("Playtime: %d seconds" % meta.playtime_seconds)
+
+# Signals
+SaveManager.save_completed.connect(_on_save_done)
+SaveManager.load_completed.connect(_on_load_done)
+```
+
+**Slot 0 is reserved for settings** (used by SettingsManager)
 
 ### SettingsManager
 

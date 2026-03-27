@@ -62,11 +62,21 @@ func _ready() -> void:
 
 ## Load all settings from save file
 func load_settings() -> void:
-	music_volume = SaveManager.load_value(SETTINGS_SECTION, "music_volume", 0.8)
-	sfx_volume = SaveManager.load_value(SETTINGS_SECTION, "sfx_volume", 1.0)
-	fullscreen = SaveManager.load_value(SETTINGS_SECTION, "fullscreen", false)
-	vsync_enabled = SaveManager.load_value(SETTINGS_SECTION, "vsync_enabled", true)
-	window_size = SaveManager.load_value(SETTINGS_SECTION, "window_size", Vector2i(480, 720))
+	# Load settings from slot 0 (reserved for settings)
+	var data := SaveManager.load_game(0)
+	
+	if data.is_empty():
+		# No settings file, use defaults
+		print("No settings found, using defaults")
+		_apply_all_settings()
+		save_settings()
+		return
+	
+	music_volume = data.get("music_volume", 0.8)
+	sfx_volume = data.get("sfx_volume", 1.0)
+	fullscreen = data.get("fullscreen", false)
+	vsync_enabled = data.get("vsync_enabled", true)
+	window_size = data.get("window_size", Vector2i(480, 720))
 	
 	# Apply settings
 	_apply_all_settings()
@@ -128,7 +138,27 @@ func get_action_events(action_name: String) -> Array[InputEvent]:
 # Private methods
 
 func _save_setting(key: String, value: Variant) -> void:
-	SaveManager.save_value(SETTINGS_SECTION, key, value)
+	# Debounced save (avoid saving on every slider drag)
+	if not _save_timer:
+		_save_timer = Timer.new()
+		add_child(_save_timer)
+		_save_timer.one_shot = true
+		_save_timer.timeout.connect(save_settings)
+	
+	_save_timer.start(0.5)  # Save after 0.5s of no changes
+
+var _save_timer: Timer = null
+
+func save_settings() -> void:
+	var data := {
+		"music_volume": music_volume,
+		"sfx_volume": sfx_volume,
+		"fullscreen": fullscreen,
+		"vsync_enabled": vsync_enabled,
+		"window_size": window_size
+	}
+	
+	SaveManager.save_game(0, data)  # Slot 0 reserved for settings
 
 func _apply_all_settings() -> void:
 	_apply_fullscreen()
