@@ -197,6 +197,11 @@ addons/game_commons/
 
 Just copy the `addons/game_commons/` folder to your new project and enable the plugin. Your visual assets stay separate in each game.
 
+## 📚 Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — Clean code guide & best practices
+- **[templates/README.md](templates/README.md)** — Template usage guide
+
 ## 📝 License
 
 MIT
