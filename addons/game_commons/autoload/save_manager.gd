@@ -55,7 +55,12 @@ const SAVE_DIR := "user://saves/"
 const SAVE_VERSION := "1.0.0"
 const ENCRYPTION_KEY := "MyGameSecretKey2026"  # Change this per-game!
 
-# Settings
+# Settings (configurable at runtime)
+var max_slots := 3:  # Default: 3 save slots (change this in your game)
+	set(value):
+		max_slots = clampi(value, 1, 99)
+		print("SaveManager: max_slots set to %d" % max_slots)
+
 var encryption_enabled := false
 var auto_backup := true
 var max_backup_count := 3
@@ -65,8 +70,8 @@ func _ready() -> void:
 
 ## Save game data to specified slot
 func save_game(slot: int, data: Dictionary, custom_metadata := {}) -> bool:
-	if slot < 1 or slot > 99:
-		push_error("Invalid slot number: %d (must be 1-99)" % slot)
+	if not _is_valid_slot(slot):
+		push_error("Invalid slot number: %d (must be 1-%d)" % [slot, max_slots])
 		return false
 	
 	save_started.emit(slot)
@@ -78,8 +83,8 @@ func save_game(slot: int, data: Dictionary, custom_metadata := {}) -> bool:
 
 ## Load game data from specified slot
 func load_game(slot: int) -> Dictionary:
-	if slot < 1 or slot > 99:
-		push_error("Invalid slot number: %d" % slot)
+	if not _is_valid_slot(slot):
+		push_error("Invalid slot number: %d (must be 1-%d)" % [slot, max_slots])
 		return {}
 	
 	load_started.emit(slot)
@@ -149,11 +154,19 @@ func get_slot_metadata(slot: int) -> SlotMetadata:
 func list_slots() -> Array[SlotMetadata]:
 	var slots: Array[SlotMetadata] = []
 	
-	for i in range(1, 100):
+	for i in range(1, max_slots + 1):
 		if slot_exists(i):
 			slots.append(get_slot_metadata(i))
 	
 	return slots
+
+## Get maximum number of save slots
+func get_max_slots() -> int:
+	return max_slots
+
+## Set maximum number of save slots (1-99)
+func set_max_slots(count: int) -> void:
+	max_slots = count
 
 ## Enable or disable encryption
 func set_encryption_enabled(enabled: bool) -> void:
@@ -326,3 +339,10 @@ func _encrypt(data: PackedByteArray) -> PackedByteArray:
 func _decrypt(data: PackedByteArray) -> PackedByteArray:
 	# XOR is symmetric
 	return _encrypt(data)
+
+func _is_valid_slot(slot: int) -> bool:
+	# Slot 0 is reserved for settings
+	if slot == 0:
+		return true
+	# Regular slots
+	return slot >= 1 and slot <= max_slots

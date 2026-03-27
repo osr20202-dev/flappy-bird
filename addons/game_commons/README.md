@@ -25,6 +25,7 @@ Reusable game systems for Godot 4.x projects. Provides **logic** for common feat
 - `examples/main_menu_example.gd` — How to use BaseMenu
 - `examples/options_menu_example.gd` — Settings/options menu with SettingsManager
 - `examples/save_load_example.gd` — Complete save/load workflow with slots
+- `examples/configure_save_manager.gd` — SaveManager configuration on startup
 
 ## 🚀 Installation
 
@@ -84,17 +85,29 @@ if SaveManager.slot_exists(1):
     print("Save found!")
 ```
 
+**Configuration (set on game startup):**
+```gdscript
+# In your game's autoload or main scene _ready()
+func _ready() -> void:
+    # Set max save slots (default: 3)
+    SaveManager.set_max_slots(5)  # 1-99
+    
+    # Enable encryption (anti-cheat)
+    SaveManager.set_encryption_enabled(true)
+    
+    # Configure backup settings
+    SaveManager.set_auto_backup(true)
+    SaveManager.max_backup_count = 3
+```
+
 **Advanced features:**
 ```gdscript
-# Enable encryption (anti-cheat)
-SaveManager.set_encryption_enabled(true)
-
-# Enable/disable auto-backup
-SaveManager.set_auto_backup(true)
-
 # Get metadata without loading full save
 var meta = SaveManager.get_slot_metadata(1)
 print("Playtime: %d seconds" % meta.playtime_seconds)
+
+# Check current config
+print("Max slots: %d" % SaveManager.get_max_slots())
 
 # Signals
 SaveManager.save_completed.connect(_on_save_done)

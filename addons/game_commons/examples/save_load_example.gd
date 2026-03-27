@@ -39,6 +39,9 @@ var game_data := {
 }
 
 func _ready() -> void:
+	# Configure SaveManager first (do this once at game startup)
+	SaveManager.set_max_slots(3)  # Allow 3 save slots
+	
 	# Example usage
 	example_save_and_load()
 	example_list_slots()
@@ -120,3 +123,14 @@ func enable_encryption() -> void:
 func can_continue_game() -> bool:
 	# Check if slot 1 (auto-save) exists
 	return SaveManager.slot_exists(1)
+
+## Example: Dynamic slot UI based on max_slots
+func create_slot_buttons() -> void:
+	for i in range(1, SaveManager.get_max_slots() + 1):
+		var button := Button.new()
+		if SaveManager.slot_exists(i):
+			var meta := SaveManager.get_slot_metadata(i)
+			button.text = "Slot %d: %s" % [i, meta.save_time]
+		else:
+			button.text = "Slot %d: Empty" % i
+		# ... add to UI
