@@ -25,12 +25,12 @@ func _ready() -> void:
 		quit_button.pressed.connect(_on_quit_pressed)
 
 func _on_play_pressed() -> void:
-	AudioManager.play_sfx(preload("res://addons/game_commons/examples/placeholder_click.wav"))
+	# AudioManager.play_sfx(...)  # Add your click sound here
 	# Game-specific: change to your game scene
 	SceneManager.change_scene("res://scenes/game/game.tscn")
 
 func _on_options_pressed() -> void:
-	AudioManager.play_sfx(preload("res://addons/game_commons/examples/placeholder_click.wav"))
+	# AudioManager.play_sfx(...)  # Add your click sound here
 	# Game-specific: open your options menu
 	pass
 

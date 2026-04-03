@@ -51,8 +51,8 @@ func _on_music_volume_changed(value: float) -> void:
 
 func _on_sfx_volume_changed(value: float) -> void:
 	SettingsManager.set_sfx_volume(value)
-	# Play a test SFX on change
-	AudioManager.play_sfx(preload("res://addons/game_commons/examples/placeholder_click.wav"))
+	# Play a test SFX on change (add your sound here)
+	# AudioManager.play_sfx(...)
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
 	SettingsManager.set_fullscreen(enabled)
