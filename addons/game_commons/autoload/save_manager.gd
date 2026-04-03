@@ -233,7 +233,7 @@ func _load_slot(slot: int) -> Dictionary:
 	var path := _get_slot_path(slot)
 	
 	if not FileAccess.file_exists(path):
-		push_warning("Slot %d does not exist" % slot)
+		# Slot doesn't exist - return empty (not an error for first load)
 		return {}
 	
 	# Read file
@@ -271,7 +271,7 @@ func _load_slot(slot: int) -> Dictionary:
 	var calculated_checksum := _calculate_checksum(game_data)
 	
 	if stored_checksum != calculated_checksum:
-		push_error("Checksum mismatch! Save file may be corrupted.")
+		push_warning("Checksum mismatch in slot %d, attempting backup..." % slot)
 		return _try_load_backup(slot)
 	
 	print("Game loaded from slot %d" % slot)
@@ -298,7 +298,7 @@ func _try_load_backup(slot: int) -> Dictionary:
 	var backup_path := _get_slot_path(slot) + ".bak"
 	
 	if not FileAccess.file_exists(backup_path):
-		push_error("No backup found for slot %d" % slot)
+		# No backup available, return empty
 		return {}
 	
 	push_warning("Attempting to load backup for slot %d..." % slot)
