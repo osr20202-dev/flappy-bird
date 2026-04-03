@@ -76,7 +76,15 @@ func load_settings() -> void:
 	sfx_volume = data.get("sfx_volume", 1.0)
 	fullscreen = data.get("fullscreen", false)
 	vsync_enabled = data.get("vsync_enabled", true)
-	window_size = data.get("window_size", Vector2i(480, 720))
+	
+	# Handle window_size (might be stored as Dictionary)
+	var loaded_size = data.get("window_size", Vector2i(480, 720))
+	if loaded_size is Dictionary:
+		window_size = Vector2i(loaded_size.get("x", 480), loaded_size.get("y", 720))
+	elif loaded_size is Vector2i:
+		window_size = loaded_size
+	else:
+		window_size = Vector2i(480, 720)
 	
 	# Apply settings
 	_apply_all_settings()
@@ -155,7 +163,7 @@ func save_settings() -> void:
 		"sfx_volume": sfx_volume,
 		"fullscreen": fullscreen,
 		"vsync_enabled": vsync_enabled,
-		"window_size": window_size
+		"window_size": {"x": window_size.x, "y": window_size.y}  # Store as Dictionary for JSON
 	}
 	
 	SaveManager.save_game(0, data)  # Slot 0 reserved for settings
