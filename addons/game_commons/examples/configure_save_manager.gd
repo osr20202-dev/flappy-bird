@@ -1,11 +1,10 @@
-extends Node
-
 ## Example: How to configure SaveManager on game startup
 ##
-## Place this in your game's autoload or main scene _ready()
+## This is a REFERENCE. Copy these functions to your game's autoload.
 
-func _ready() -> void:
-	configure_save_manager()
+# Don't run standalone - copy to your game code:
+# func _ready() -> void:
+#     configure_save_manager()
 
 func configure_save_manager() -> void:
 	# Example 1: Simple arcade game (1 slot only)

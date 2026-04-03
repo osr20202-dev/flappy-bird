@@ -1,6 +1,7 @@
-extends Node
-
 ## Example: How to use the advanced SaveManager
+##
+## This is a REFERENCE/TEMPLATE, not meant to run standalone.
+## Copy the functions you need to your actual game code.
 ##
 ## This demonstrates:
 ## - Saving hierarchical game data
@@ -38,13 +39,11 @@ var game_data := {
 	}
 }
 
-func _ready() -> void:
-	# Configure SaveManager first (do this once at game startup)
-	SaveManager.set_max_slots(3)  # Allow 3 save slots
-	
-	# Example usage
-	example_save_and_load()
-	example_list_slots()
+# Uncomment to test (requires SaveManager to be active):
+# func _ready() -> void:
+#     SaveManager.set_max_slots(3)
+#     example_save_and_load()
+#     example_list_slots()
 
 ## Example: Save game to slot 1
 func example_save_and_load() -> void:

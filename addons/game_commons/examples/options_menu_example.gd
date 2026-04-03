@@ -1,23 +1,25 @@
-extends BaseMenu
+## Example: Options/Settings menu TEMPLATE
+##
+## This is a TEMPLATE. Copy to your game and uncomment to use.
+## See instructions at the bottom of this file.
+
+# extends BaseMenu
 
 ## Example: Options/Settings menu
 ##
 ## This shows how to create a settings menu using SettingsManager.
 ## Copy to your game and customize the UI layout/styling.
 
-# Sliders (node paths will differ per game)
-@onready var music_slider: HSlider = $VBoxContainer/MusicVolume/Slider
-@onready var sfx_slider: HSlider = $VBoxContainer/SFXVolume/Slider
+# Uncomment and update paths when using in your game:
+#
+# @onready var music_slider: HSlider = $VBoxContainer/MusicVolume/Slider
+# @onready var sfx_slider: HSlider = $VBoxContainer/SFXVolume/Slider
+# @onready var fullscreen_checkbox: CheckBox = $VBoxContainer/Fullscreen/CheckBox
+# @onready var vsync_checkbox: CheckBox = $VBoxContainer/VSync/CheckBox
+# @onready var back_button: Button = $VBoxContainer/BackButton
+# @onready var reset_button: Button = $VBoxContainer/ResetButton
 
-# Toggles
-@onready var fullscreen_checkbox: CheckBox = $VBoxContainer/Fullscreen/CheckBox
-@onready var vsync_checkbox: CheckBox = $VBoxContainer/VSync/CheckBox
-
-# Buttons
-@onready var back_button: Button = $VBoxContainer/BackButton
-@onready var reset_button: Button = $VBoxContainer/ResetButton
-
-func _ready() -> void:
+func _example_ready() -> void:
 	super._ready()
 	
 	# Initialize UI with current settings
