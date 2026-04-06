@@ -6,10 +6,12 @@ signal score_changed(new_score: int)
 signal game_started
 signal game_over_triggered
 signal high_score_beaten
+signal slot_changed(new_slot: int)
 
 var state: GameEnums.GameState = GameEnums.GameState.READY
 var score: int = 0
 var high_score: int = 0
+var current_slot: int = 1
 
 func _ready() -> void:
 	_load_high_score()
@@ -43,11 +45,21 @@ func restart() -> void:
 	score = 0
 	SceneManager.reload_current_scene()
 
+func return_to_title() -> void:
+	state = GameEnums.GameState.READY
+	score = 0
+	SceneManager.change_scene("res://scenes/ui/title_menu/title_menu.tscn")
+
+func switch_slot(slot: int) -> void:
+	current_slot = slot
+	_load_high_score()
+	slot_changed.emit(current_slot)
+
 func _load_high_score() -> void:
-	var data := SaveManager.load_game(0)
+	var data := SaveManager.load_game(current_slot)
 	high_score = data.get("high_score", 0)
 
 func _save_high_score() -> void:
 	if score > high_score:
 		high_score = score
-		SaveManager.save_game(0, {"high_score": high_score})
+		SaveManager.save_game(current_slot, {"high_score": high_score})
