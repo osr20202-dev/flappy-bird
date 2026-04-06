@@ -9,13 +9,15 @@ extends CanvasLayer
 @onready var final_score_label: Label = $GameOverPanel/VBoxContainer/FinalScoreLabel
 @onready var high_score_label: Label = $GameOverPanel/VBoxContainer/HighScoreLabel
 @onready var restart_button: Button = $GameOverPanel/VBoxContainer/RestartButton
+@onready var title_button: Button = $GameOverPanel/VBoxContainer/TitleButton
 
 func _ready() -> void:
 	GameManager.score_changed.connect(_on_score_changed)
 	GameManager.game_started.connect(_on_game_started)
 	GameManager.game_over_triggered.connect(_on_game_over)
-	
+
 	restart_button.pressed.connect(_on_restart_pressed)
+	title_button.pressed.connect(_on_title_pressed)
 	
 	_update_display()
 
@@ -46,3 +48,6 @@ func _on_game_over() -> void:
 
 func _on_restart_pressed() -> void:
 	GameManager.restart()
+
+func _on_title_pressed() -> void:
+	GameManager.return_to_title()
